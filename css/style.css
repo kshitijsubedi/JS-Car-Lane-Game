@@ -1,0 +1,17 @@
+
+#gameContainer{
+    background-color:black;
+    display: flex;
+}
+#gameScreen{
+    position:relative;
+}
+.player-image, .enemy-image {
+    height:160px;
+    width:80px;
+}
+.menu, .score-board {
+    position:absolute;
+    top:20%;
+    left:20%;
+}

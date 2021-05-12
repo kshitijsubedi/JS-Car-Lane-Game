@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href="./css/style.css"/>
+    <link rel='stylesheet' href="./css/layout.css"/>
+    <link rel='stylesheet' href="./css/reset.css"/>
+    <title>2D Car Lane Game</title>
+</head>
+<body>
+    <div id='gameContainer'>
+        <!-- <canvas id='canvas' height="700px" width="500px"></canvas> -->
+        <div id='game'>
+            <div id='gameScreen'>
+                <div id='menu'>
+                    <h3>2D lane Game</h3>
+                    <p>Use the keyboard to play the game <br>
+                    A -> Move left lane <br>
+                    D -> Move right lane 
+                    </p>
+                    <button class='start-button'>START GAME</button>
+                </div>
+                <div id='score-board'>
+                    HIGH SCORE <br>
+                    <span class='score'></span>
+                </div>
+                <div id='player-car'>
+                    <img class='player-image' alt='Player Car' src='./assets/Car.png'/>
+                </div>
+                <div id='enemies'>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./js/index.js" />
+</body>
+</html>
