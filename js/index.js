@@ -4,6 +4,12 @@ class GameContainer {
     this.bgy = 0;
     let gameDiv = document.getElementById("game");
     this.gameDiv = gameDiv;
+    let startButton = document.getElementById('start-button');
+   let gameMenu = document.getElementById('menu');
+   let hsBoard = document.getElementById('high-score-board');
+   this.hsBoard=hsBoard;
+   this.gameMenu=gameMenu;
+   this.startButton=startButton;
 
     gameDiv.style.margin = "0 auto";
     gameDiv.style.height = "700px";
@@ -23,6 +29,16 @@ class GameContainer {
         playerCar.move(1);
       }
     });
+    this.startButton.addEventListener('click',()=>{
+      initScene()
+      menu=false;
+      this.gameMenu.style.display='none';
+      this.hsBoard.style.display='none';
+    })
+  }
+  displayMenu(){
+    this.gameMenu.style.display='block';
+    this.hsBoard.style.display='block';
   }
 
   environment() {
@@ -31,6 +47,11 @@ class GameContainer {
       : (this.gameDiv.style.backgroundPositionY =
           parseInt(this.gameDiv.style.backgroundPositionY) + 10 + "px");
   }
+  static gameOver() {
+    points > highScore ? localStorage.setItem("score", points) : "";
+    hsPoint.innerText =highScore;
+    menu=true;
+}
 }
 
 class PlayerCar {
@@ -86,7 +107,7 @@ class PlayerCar {
       rect1.y < rect2.y + height &&
       rect1.y + height > rect2.y
     ) {
-      GameMech.gameOver();
+      GameContainer.gameOver();
     }
   }
 }
@@ -126,27 +147,11 @@ class EnemyCar {
   }
 }
 
-class GameMech {
-  constructor() {
-   
-  }
-  static gameOver() {
-    let highScore = localStorage.getItem("score");
-    points > highScore ? localStorage.setItem("score", points) : "";
-    window.cancelAnimationFrame(reqAnim);
-}
-}
 
 let gameContent = new GameContainer();
-let gameContainer = document.getElementById("gameContainer");
-
-gameHeight = gameContainer.style.height;
-gameWidth = gameContainer.style.width;
-
+let playerCar = new PlayerCar();
 let release = true;
-setInterval(() => {
-  release ? (release = false) : (release = true);
-}, 700);
+
 
 let get_random = function (list) {
   return list[Math.floor(Math.random() * list.length)];
@@ -159,39 +164,55 @@ let enemyImageList = [
   "Mini_van.png",
 ];
 
-let playerCar = new PlayerCar();
-playerCar.initialize();
 gameContent.initialize();
+
+let initScene = ()=>{
+  playerCar.initialize();
+  setInterval(() => {
+    release ? (release = false) : (release = true);
+  }, 700);
+}
 
 let maxCar = 3;
 var enemyCount = [];
 let points = 0;
 var reqAnim;
+let menu=true
+
+let score =document.getElementById('score-point');
+let hsPoint =document.getElementById('high-score-point');
+let highScore = localStorage.getItem("score");
+hsPoint.innerText =highScore;
 
 let loop = () => {
 reqAnim=window.requestAnimationFrame(loop);
-  let howMany = document.getElementById("enemies").childElementCount;
-  if (howMany < maxCar) {
-    for (i = 0; i < maxCar - enemyCount.length; i++) {
-      enemyCount.push(new EnemyCar());
-    }
-  }
-  enemyCount.forEach((car) => {
-    if (release) {
-      if (!car.onscreen) {
-        car.initialize();
-        release = false;
+  if(!menu){
+    let howMany = document.getElementById("enemies").childElementCount;
+    score.innerText=points;
+    if (howMany < maxCar) {
+      for (i = 0; i < maxCar - enemyCount.length; i++) {
+        enemyCount.push(new EnemyCar());
       }
     }
-    if(car.onscreen) { 
+    enemyCount.forEach((car) => {
+      if (release) {
+        if (!car.onscreen) {
+          car.initialize();
+          release = false;
+        }
+      }
+      if(car.onscreen) { 
         car.accelerate() 
         PlayerCar.collision(playerCar,car)
-    }
-  });
-  
+      }
+    });
+  }
+  else {
+    gameContent.displayMenu();
+  }
+
   gameContent.environment();
   
 };
 
 loop();
-

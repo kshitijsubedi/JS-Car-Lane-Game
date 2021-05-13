@@ -7,6 +7,7 @@
     <link rel='stylesheet' href="./css/style.css"/>
     <link rel='stylesheet' href="./css/layout.css"/>
     <link rel='stylesheet' href="./css/reset.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
     <title>2D Car Lane Game</title>
 </head>
 <body>
@@ -14,22 +15,28 @@
         <!-- <canvas id='canvas' height="700px" width="500px"></canvas> -->
         <div id='game'>
             <div id='gameScreen'>
+                
+                
+                <div id='player-car'>
+                    <img class='player-image' alt='Player Car' src='./assets/Car.png'/>
+                </div>
+                <div id='enemies'>
+                </div>
                 <div id='menu'>
                     <h3>2D lane Game</h3>
                     <p>Use the keyboard to play the game <br>
                     A -> Move left lane <br>
                     D -> Move right lane 
                     </p>
-                    <button class='start-button'>START GAME</button>
+                    <button id='start-button'>START GAME</button>
                 </div>
                 <div id='score-board'>
-                    HIGH SCORE <br>
-                    <span class='score'></span>
+                    SCORE :
+                    <span id='score-point'></span>
                 </div>
-                <div id='player-car'>
-                    <img class='player-image' alt='Player Car' src='./assets/Car.png'/>
-                </div>
-                <div id='enemies'>
+                <div id='high-score-board'>
+                    HIGH-SCORE :
+                    <span id='high-score-point'></span>
                 </div>
             </div>
         </div>
