@@ -21,6 +21,13 @@ body {
     background-size:contain;
     padding:70px;
     top:90px;
+    color:white;
+    text-align:center;
+}
+#menu h3 {
+    font-size:24px;
+    padding:5px;
+
 }
 
 #score-board,#high-score-board {
@@ -30,7 +37,7 @@ body {
     background: url('../assets/score.png') no-repeat;
     background-size:contain;
     height:80px;
-    width:150px;
+    width:170px;
     padding:20px 25px;
     font-weight:bolder;
     color:white;

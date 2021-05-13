@@ -5,11 +5,11 @@ class GameContainer {
     let gameDiv = document.getElementById("game");
     this.gameDiv = gameDiv;
     let startButton = document.getElementById('start-button');
-   let gameMenu = document.getElementById('menu');
-   let hsBoard = document.getElementById('high-score-board');
-   this.hsBoard=hsBoard;
-   this.gameMenu=gameMenu;
-   this.startButton=startButton;
+    let gameMenu = document.getElementById('menu');
+    let hsBoard = document.getElementById('high-score-board');
+    this.hsBoard = hsBoard;
+    this.gameMenu = gameMenu;
+    this.startButton = startButton;
 
     gameDiv.style.margin = "0 auto";
     gameDiv.style.height = "700px";
@@ -21,7 +21,7 @@ class GameContainer {
     gameDiv.style.overflow = "hidden";
   }
   initialize() {
-    
+
     document.addEventListener("keydown", function (evt) {
       if (evt.key === "a" || evt.key === "ArrowLeft") {
         playerCar.move(-1);
@@ -29,40 +29,49 @@ class GameContainer {
         playerCar.move(1);
       }
     });
-    this.startButton.addEventListener('click',()=>{
+    this.startButton.addEventListener('click', () => {
       initScene()
-      menu=false;
-      this.gameMenu.style.display='none';
-      this.hsBoard.style.display='none';
+      menu = false;
+      this.gameMenu.style.display = 'none';
+      this.hsBoard.style.display = 'none';
+      points = 0;
     })
   }
-  displayMenu(){
-    this.gameMenu.style.display='block';
-    this.hsBoard.style.display='block';
+  displayMenu() {
+    this.gameMenu.style.display = 'block';
+    this.hsBoard.style.display = 'block';
   }
 
   environment() {
-    parseInt(this.gameDiv.style.backgroundPositionY) >= 1000
-      ? (this.gameDiv.style.backgroundPositionY = "0px")
-      : (this.gameDiv.style.backgroundPositionY =
-          parseInt(this.gameDiv.style.backgroundPositionY) + 10 + "px");
+    parseInt(this.gameDiv.style.backgroundPositionY) >= 1000 ?
+      (this.gameDiv.style.backgroundPositionY = "0px") :
+      (this.gameDiv.style.backgroundPositionY =
+        parseInt(this.gameDiv.style.backgroundPositionY) + 10 + "px");
   }
   static gameOver() {
     points > highScore ? localStorage.setItem("score", points) : "";
-    hsPoint.innerText =highScore;
-    menu=true;
-}
+    hsPoint.innerText = highScore;
+    menu = true;
+    playerCar.playerCar.style.display = 'none';
+    enemyCount.forEach((car, index) => {
+      car.enemyCar.remove()
+    })
+    enemyCount = []
+    clearInterval(releaseInterval)
+  }
 }
 
 class PlayerCar {
   constructor() {
     let playerCar = document.getElementById("player-car");
+    playerCar.style.display = 'none';
     this.playerCar = playerCar;
     this.positionX = 210;
     this.positionY = 525;
     this.laneIndex = 2;
   }
   initialize() {
+    this.playerCar.style.display = 'block';
     this.playerCar.style.position = "absolute";
     this.playerCar.style.top = this.positionY + "px";
     this.playerCar.style.left = this.positionX + "px";
@@ -82,13 +91,13 @@ class PlayerCar {
       this.laneIndex += operation;
       this.updatePlayer();
     } else {
-      this.laneIndex + operation <= 0
-        ? (this.laneIndex = 1)
-        : (this.laneIndex = 3);
+      this.laneIndex + operation <= 0 ?
+        (this.laneIndex = 1) :
+        (this.laneIndex = 3);
     }
   }
 
-  static collision(player,opponent) {
+  static collision(player, opponent) {
 
     const rect1 = {
       x: parseInt(player.playerCar.style.left),
@@ -100,7 +109,6 @@ class PlayerCar {
     };
     const width = 80;
     const height = 160;
-    // console.log(rect1,rect2)
     if (
       rect1.x < rect2.x + width &&
       rect1.x + width > rect2.x &&
@@ -165,10 +173,11 @@ let enemyImageList = [
 ];
 
 gameContent.initialize();
+var releaseInterval;
 
-let initScene = ()=>{
+let initScene = () => {
   playerCar.initialize();
-  setInterval(() => {
+  releaseInterval = setInterval(() => {
     release ? (release = false) : (release = true);
   }, 700);
 }
@@ -177,18 +186,18 @@ let maxCar = 3;
 var enemyCount = [];
 let points = 0;
 var reqAnim;
-let menu=true
+let menu = true
 
-let score =document.getElementById('score-point');
-let hsPoint =document.getElementById('high-score-point');
+let score = document.getElementById('score-point');
+let hsPoint = document.getElementById('high-score-point');
 let highScore = localStorage.getItem("score");
-hsPoint.innerText =highScore;
+hsPoint.innerText = highScore;
 
 let loop = () => {
-reqAnim=window.requestAnimationFrame(loop);
-  if(!menu){
+  reqAnim = window.requestAnimationFrame(loop);
+  if (!menu) {
     let howMany = document.getElementById("enemies").childElementCount;
-    score.innerText=points;
+    score.innerText = points;
     if (howMany < maxCar) {
       for (i = 0; i < maxCar - enemyCount.length; i++) {
         enemyCount.push(new EnemyCar());
@@ -201,18 +210,17 @@ reqAnim=window.requestAnimationFrame(loop);
           release = false;
         }
       }
-      if(car.onscreen) { 
-        car.accelerate() 
-        PlayerCar.collision(playerCar,car)
+      if (car.onscreen) {
+        car.accelerate()
+        PlayerCar.collision(playerCar, car)
       }
     });
-  }
-  else {
+  } else {
     gameContent.displayMenu();
   }
 
   gameContent.environment();
-  
+
 };
 
 loop();
