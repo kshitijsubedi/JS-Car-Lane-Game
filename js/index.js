@@ -35,7 +35,7 @@ class GameContainer {
     gameDiv.style.margin = "0 auto";
     gameDiv.style.height = "700px";
     gameDiv.style.width = "500px";
-    gameDiv.style.backgroundImage = "url('../assets/roadBackground.png') ";
+    gameDiv.style.backgroundImage = "url('./assets/roadBackground.png') ";
     gameDiv.style.backgroundSize = "contain";
     gameDiv.style.backgroundRepeat = "repeat-y";
     gameDiv.style.backgroundPositionY = "0px";
