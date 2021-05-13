@@ -1,3 +1,6 @@
+/*
+Variables Declarations
+*/
 let maxCar = 3;
 var enemyCount = [];
 let points = 0;
@@ -13,6 +16,9 @@ let enemyImageList = [
   "Mini_van.png",
 ];
 
+/*
+Main Game Class
+*/
 class GameContainer {
   constructor() {
     this.bgx = 0;
@@ -35,6 +41,12 @@ class GameContainer {
     gameDiv.style.backgroundPositionY = "0px";
     gameDiv.style.overflow = "hidden";
   }
+  /*
+  Initialize the keyboard controls.
+  - Car controls.
+  - Start Button Controls.
+   */
+
   initialize() {
 
     document.addEventListener("keydown", function (evt) {
@@ -52,21 +64,35 @@ class GameContainer {
       points = 0;
     })
   }
+  /*
+  Show the Menu screen
+  */
   displayMenu() {
     this.gameMenu.style.display = 'block';
     this.hsBoard.style.display = 'block';
   }
 
+  /*
+    Background Road Moving Effect
+  */
   environment() {
     parseInt(this.gameDiv.style.backgroundPositionY) >= 1000 ?
       (this.gameDiv.style.backgroundPositionY = "0px") :
       (this.gameDiv.style.backgroundPositionY =
         parseInt(this.gameDiv.style.backgroundPositionY) + 10 + "px");
   }
+
+  /*
+    On Game Over
+    Reset the Score,
+    Clear Enemy Cars,
+    Display menu
+  */
+
   static gameOver() {
-    if(points > highScore){
-   localStorage.setItem("score", points) ;
-    hsPoint.innerText = points;
+    if (points > highScore) {
+      localStorage.setItem("score", points);
+      hsPoint.innerText = points;
     }
     menu = true;
     playerCar.playerCar.style.display = 'none';
@@ -76,11 +102,17 @@ class GameContainer {
     enemyCount = []
     clearInterval(releaseInterval)
   }
+  /*
+  Get random selection form a input array
+  */
   static get_random(list) {
     return list[Math.floor(Math.random() * list.length)];
   };
 }
 
+/*
+  Main Player Class
+*/
 class PlayerCar {
   constructor() {
     let playerCar = document.getElementById("player-car");
@@ -96,6 +128,10 @@ class PlayerCar {
     this.playerCar.style.top = this.positionY + "px";
     this.playerCar.style.left = this.positionX + "px";
   }
+
+  /*
+  Update Car to fixed lanes position.
+  */
   updatePlayer() {
     if (this.laneIndex == 1) {
       this.playerCar.style.left = "45px";
@@ -105,7 +141,9 @@ class PlayerCar {
       this.playerCar.style.left = "380px";
     }
   }
-
+  /*
+   Swap lanes according to keyboard input.
+  */
   move(operation) {
     if (this.laneIndex + operation > 0 && this.laneIndex + operation < 4) {
       this.laneIndex += operation;
@@ -117,6 +155,10 @@ class PlayerCar {
     }
   }
 
+  /*
+    Rectangular Collision Check.
+    if collision ? End game
+  */
   static collision(player, opponent) {
 
     const rect1 = {
@@ -140,6 +182,10 @@ class PlayerCar {
   }
 }
 
+/*
+  Enemy Car Class
+  with random lanes positions
+*/
 class EnemyCar {
   constructor() {
     let enemies = document.getElementById("enemies");
@@ -165,6 +211,10 @@ class EnemyCar {
     image.style.transform = "rotate(180deg)";
     this.enemyCar.appendChild(image);
   }
+  /*
+    Move enemy car from top to bottom.
+    Upon reaching bottom remove the car element.
+  */
   accelerate() {
     this.enemyCar.style.top = parseInt(this.enemyCar.style.top) + 15 + "px";
     if (parseInt(this.enemyCar.style.top) > 700) {
@@ -175,6 +225,9 @@ class EnemyCar {
   }
 }
 
+/*
+
+*/
 
 let score = document.getElementById('score-point');
 let hsPoint = document.getElementById('high-score-point');
@@ -185,6 +238,10 @@ let playerCar = new PlayerCar();
 gameContent.initialize();
 hsPoint.innerText = highScore;
 
+/*
+  Init player car positions and
+  Release the enemy car on certain interval.
+*/
 let initScene = () => {
   playerCar.initialize();
   releaseInterval = setInterval(() => {
@@ -192,9 +249,15 @@ let initScene = () => {
   }, 700);
 }
 
+/*
+  Main Game Loop
+*/
 
 let loop = () => {
   reqAnim = window.requestAnimationFrame(loop);
+  /*
+    Fulfill Enemy car count on screen then initialize and accelerate it.
+  */
   if (!menu) {
     let howMany = document.getElementById("enemies").childElementCount;
     score.innerText = points;
@@ -223,4 +286,4 @@ let loop = () => {
 
 };
 
-loop();
+loop(); // start game loop
