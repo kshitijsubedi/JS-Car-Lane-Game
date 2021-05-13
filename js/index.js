@@ -1,3 +1,18 @@
+let maxCar = 3;
+var enemyCount = [];
+let points = 0;
+var reqAnim;
+let menu = true
+let release = true;
+var releaseInterval;
+let enemyImageList = [
+  "Ambulance.png",
+  "Audi.png",
+  "Black_viper.png",
+  "Mini_truck.png",
+  "Mini_van.png",
+];
+
 class GameContainer {
   constructor() {
     this.bgx = 0;
@@ -49,8 +64,10 @@ class GameContainer {
         parseInt(this.gameDiv.style.backgroundPositionY) + 10 + "px");
   }
   static gameOver() {
-    points > highScore ? localStorage.setItem("score", points) : "";
-    hsPoint.innerText = highScore;
+    if(points > highScore){
+   localStorage.setItem("score", points) ;
+    hsPoint.innerText = points;
+    }
     menu = true;
     playerCar.playerCar.style.display = 'none';
     enemyCount.forEach((car, index) => {
@@ -59,6 +76,9 @@ class GameContainer {
     enemyCount = []
     clearInterval(releaseInterval)
   }
+  static get_random(list) {
+    return list[Math.floor(Math.random() * list.length)];
+  };
 }
 
 class PlayerCar {
@@ -128,8 +148,8 @@ class EnemyCar {
     enemies.appendChild(enemyCar);
     this.enemyCar = enemyCar;
     this.positionY = -100;
-    this.positionX = get_random([45, 210, 380]);
-    this.laneIndex = get_random([1, 2, 3]);
+    this.positionX = GameContainer.get_random([45, 210, 380]);
+    this.laneIndex = GameContainer.get_random([1, 2, 3]);
     this.onscreen = false;
   }
   initialize() {
@@ -138,7 +158,7 @@ class EnemyCar {
     this.enemyCar.style.top = this.positionY + "px";
     this.enemyCar.style.left = this.positionX + "px";
     let image = new Image();
-    let randomEnemy = `./assets/${get_random(enemyImageList)}`;
+    let randomEnemy = `./assets/${GameContainer.get_random(enemyImageList)}`;
     image.src = randomEnemy;
     image.width = 80;
     image.height = 160;
@@ -156,24 +176,14 @@ class EnemyCar {
 }
 
 
+let score = document.getElementById('score-point');
+let hsPoint = document.getElementById('high-score-point');
+let highScore = localStorage.getItem("score");
 let gameContent = new GameContainer();
 let playerCar = new PlayerCar();
-let release = true;
-
-
-let get_random = function (list) {
-  return list[Math.floor(Math.random() * list.length)];
-};
-let enemyImageList = [
-  "Ambulance.png",
-  "Audi.png",
-  "Black_viper.png",
-  "Mini_truck.png",
-  "Mini_van.png",
-];
 
 gameContent.initialize();
-var releaseInterval;
+hsPoint.innerText = highScore;
 
 let initScene = () => {
   playerCar.initialize();
@@ -182,16 +192,6 @@ let initScene = () => {
   }, 700);
 }
 
-let maxCar = 3;
-var enemyCount = [];
-let points = 0;
-var reqAnim;
-let menu = true
-
-let score = document.getElementById('score-point');
-let hsPoint = document.getElementById('high-score-point');
-let highScore = localStorage.getItem("score");
-hsPoint.innerText = highScore;
 
 let loop = () => {
   reqAnim = window.requestAnimationFrame(loop);
@@ -199,7 +199,7 @@ let loop = () => {
     let howMany = document.getElementById("enemies").childElementCount;
     score.innerText = points;
     if (howMany < maxCar) {
-      for (i = 0; i < maxCar - enemyCount.length; i++) {
+      for (var i = 0; i < maxCar - enemyCount.length; i++) {
         enemyCount.push(new EnemyCar());
       }
     }
