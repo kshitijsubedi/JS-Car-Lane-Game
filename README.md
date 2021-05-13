@@ -1,6 +1,6 @@
 # LeapfrogInternship
 
-- Vanilla JS Image Slider
+- Vanilla JS Car Lane Game
 
 ### Deployed here :
-https://kshitijsubedi.github.io/JS-Image-Carousel/
+https://kshitijsubedi.github.io/JS-Car-Lane-Game
